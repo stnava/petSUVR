@@ -94,8 +94,8 @@ library( "ANTsR" )
 data( DesikanKillianyTourville )
 labelData = DesikanKillianyTourville
 bd = path.expand( "./elderly/" )
-myid = "0001" # args[ 3 ]
-mydt = "19451231" # args[ 4 ]
+myid = "0001"
+mydt = "19451231"
 outname <- paste( bd ,myid,'_',mydt,sep='')
 template = antsImageRead( "./adniTemplate/T_template0.nii.gz" )
 malf = antsImageRead( "./adniTemplate/antsMalfLabeling.nii.gz" )
@@ -108,9 +108,11 @@ if ( length( temaff ) > 0 ) {
   temwrp = Sys.glob( paste( outname, "*SubjectToTemplate1Warp.nii.gz",sep=''))[ 1 ]
   itemwrp = Sys.glob( paste( outname, "*TemplateToSubject0Warp.nii.gz",sep=''))[ 1 ]
 }
-txc2mni = c( temwrp, temaff )
-mni2txc = c( temaff, itemwrp )
-malf2sub = antsApplyTransforms( t1img, malf, transformlist = mni2txc, interpolator="NearestNeighbor" )
+txc2mni = temaff # c( temwrp, temaff ) # warps too large for github
+mni2txc = temaff # c( temaff, itemwrp )
+malf2sub = antsApplyTransforms( t1img, malf, transformlist = mni2txc, 
+                                interpolator="NearestNeighbor", 
+                                whichtoinvert=c(TRUE) )
 malfCTXsub = malf2sub * thresholdImage( segimg, 2, 2 )
 
 petfn = Sys.glob(  paste( outname, "*av45pet.nii.gz", sep='') )
@@ -134,7 +136,7 @@ plot( t1img  )
 Display the amyloid data overlaid on the T1 image.
 
 ```{r amyload3,eval=TRUE}
-plot( t1img, fdgProc$petSUVR, window.overlay=c(0.9, max( fdgProc$petSUVR ))  )
+plot( t1img, fdgProc$petSUVR, window.overlay=c( 0.9, max( fdgProc$petSUVR ) ) )
 ```
 
 Display the cortical segmentation and labeling on the amyloid data.
