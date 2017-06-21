@@ -21,3 +21,6 @@ the brain from the amyloid image.   then
 
 one can rigidly register to the t1 brain more accurately.
 
+will add amyloid template later ... remind me if it's not 
+
+present here.
